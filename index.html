@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteFlow - Smart Notes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div class="logo-area">
+            <div class="logo">📝</div>
+
+            <div>
+                <h1>NoteFlow</h1>
+                <p>Your smart personal notes manager</p>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <button id="themeBtn" class="icon-btn">🌙</button>
+            <button id="lockBtn" class="icon-btn">🔐</button>
+            <button id="addNoteBtn" class="new-note-btn">
+                + New Note
+            </button>
+        </div>
+
+    </header>
+
+
+    <!-- STATS -->
+    <section class="stats">
+
+        <div class="stat-card">
+            <span>📝</span>
+            <div>
+                <strong id="totalCount">0</strong>
+                <small>Total Notes</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <span>⭐</span>
+            <div>
+                <strong id="favoriteCount">0</strong>
+                <small>Favorites</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <span>📌</span>
+            <div>
+                <strong id="pinnedCount">0</strong>
+                <small>Pinned</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <span>📦</span>
+            <div>
+                <strong id="archiveCount">0</strong>
+                <small>Archived</small>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- SEARCH -->
+    <div class="search-box">
+
+        <span>🔍</span>
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search your notes..."
+        >
+
+    </div>
+
+
+    <!-- FILTERS -->
+    <section class="filters">
+
+        <select id="categoryFilter">
+            <option value="all">All Categories</option>
+            <option value="Study">📚 Study</option>
+            <option value="Work">💼 Work</option>
+            <option value="Ideas">💡 Ideas</option>
+            <option value="Personal">🏠 Personal</option>
+            <option value="Important">📌 Important</option>
+        </select>
+
+        <select id="sortSelect">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="az">A → Z</option>
+            <option value="za">Z → A</option>
+        </select>
+
+        <button id="archiveViewBtn" class="filter-btn">
+            📦 Archived
+        </button>
+
+        <button id="allNotesBtn" class="filter-btn active">
+            📝 All Notes
+        </button>
+
+    </section>
+
+
+    <!-- NOTES -->
+    <main id="notesContainer" class="notes-container"></main>
+
+
+    <!-- IMPORT / EXPORT -->
+    <section class="tools">
+
+        <button id="exportTxtBtn">📄 Export TXT</button>
+
+        <button id="exportJsonBtn">📦 Export JSON</button>
+
+        <button id="importBtn">📥 Import JSON</button>
+
+        <input
+            type="file"
+            id="importFile"
+            accept=".json"
+            hidden
+        >
+
+    </section>
+
+</div>
+
+
+<!-- NOTE MODAL -->
+
+<div id="noteModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <div>
+                <h2 id="modalTitle">Create New Note</h2>
+                <p>Save your thoughts and ideas</p>
+            </div>
+
+            <button id="closeModalBtn" class="close-btn">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="noteForm">
+
+            <div class="form-group">
+
+                <label>Title</label>
+
+                <input
+                    type="text"
+                    id="noteTitle"
+                    placeholder="Enter note title..."
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Category</label>
+
+                <select id="noteCategory">
+
+                    <option value="Study">📚 Study</option>
+                    <option value="Work">💼 Work</option>
+                    <option value="Ideas">💡 Ideas</option>
+                    <option value="Personal">🏠 Personal</option>
+                    <option value="Important">📌 Important</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Note</label>
+
+                <textarea
+                    id="noteText"
+                    rows="7"
+                    placeholder="Write your note..."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <!-- CHECKLIST -->
+
+            <div class="form-group">
+
+                <label>
+                    Checklist
+                </label>
+
+                <div class="checklist-input">
+
+                    <input
+                        type="text"
+                        id="checkItem"
+                        placeholder="Add task..."
+                    >
+
+                    <button
+                        type="button"
+                        id="addCheckBtn"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+                <div id="checklistPreview"></div>
+
+            </div>
+
+
+            <!-- COLOR -->
+
+            <div class="form-group">
+
+                <label>Note Color</label>
+
+                <div class="color-options">
+
+                    <label>
+                        <input type="radio" name="noteColor" value="purple" checked>
+                        <span class="color purple"></span>
+                    </label>
+
+                    <label>
+                        <input type="radio" name="noteColor" value="blue">
+                        <span class="color blue"></span>
+                    </label>
+
+                    <label>
+                        <input type="radio" name="noteColor" value="pink">
+                        <span class="color pink"></span>
+                    </label>
+
+                    <label>
+                        <input type="radio" name="noteColor" value="green">
+                        <span class="color green"></span>
+                    </label>
+
+                    <label>
+                        <input type="radio" name="noteColor" value="yellow">
+                        <span class="color yellow"></span>
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- IMAGE -->
+
+            <div class="form-group">
+
+                <label>Image</label>
+
+                <input
+                    type="file"
+                    id="noteImage"
+                    accept="image/*"
+                >
+
+            </div>
+
+            <div id="imagePreview"></div>
+
+
+            <!-- REMINDER -->
+
+            <div class="form-group">
+
+                <label>Reminder</label>
+
+                <input
+                    type="datetime-local"
+                    id="noteReminder"
+                >
+
+            </div>
+
+
+            <div class="form-buttons">
+
+                <button
+                    type="button"
+                    id="cancelBtn"
+                    class="cancel-btn"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+                    Save Note
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- PASSWORD MODAL -->
+
+<div id="passwordModal" class="modal">
+
+    <div class="modal-content small-modal">
+
+        <h2>🔐 Lock Notes</h2>
+
+        <p class="password-text">
+            Set a password to protect your notes.
+        </p>
+
+        <input
+            type="password"
+            id="passwordInput"
+            placeholder="Enter password"
+        >
+
+        <div class="form-buttons">
+
+            <button
+                id="cancelPasswordBtn"
+                class="cancel-btn"
+            >
+                Cancel
+            </button>
+
+            <button
+                id="savePasswordBtn"
+                class="save-btn"
+            >
+                Save Password
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
